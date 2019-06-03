@@ -15,4 +15,4 @@ server.pid
 /dist/
 .cache
 .idea
-secret.conf
+application.conf

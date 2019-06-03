@@ -11,12 +11,14 @@ libraryDependencies += "net.logstash.logback" % "logstash-logback-encoder" % "5.
 libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.16"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.1"
 
-libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
 libraryDependencies += "org.flywaydb" %% "flyway-play" % "5.3.2"
+libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.1"
+libraryDependencies += "com.github.tminglei" %% "slick-pg" % "0.17.3"
 
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test
 libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "3.1.2" % Test
 libraryDependencies += "io.gatling" % "gatling-test-framework" % "3.1.2" % Test
+libraryDependencies += "com.h2database" % "h2" % "1.4.199" % Test
 
 val gitCommitString = SettingKey[String]("gitCommit")
 gitCommitString := git.gitHeadCommit.value.getOrElse("Not Set")
@@ -38,4 +40,6 @@ lazy val root = (project in file("."))
     ),
     buildInfoPackage := "info",
     buildInfoOptions += BuildInfoOption.BuildTime,
+
+    javaOptions in Test += "-Dconfig.file=test/reference.conf"
   )
