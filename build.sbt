@@ -11,6 +11,9 @@ libraryDependencies += "net.logstash.logback" % "logstash-logback-encoder" % "5.
 libraryDependencies += "com.netaporter" %% "scala-uri" % "0.4.16"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.1"
 
+libraryDependencies += "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+libraryDependencies += "org.flywaydb" %% "flyway-play" % "5.3.2"
+
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test
 libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "3.1.2" % Test
 libraryDependencies += "io.gatling" % "gatling-test-framework" % "3.1.2" % Test
