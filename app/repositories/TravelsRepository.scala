@@ -66,4 +66,16 @@ class TravelsRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
     db.run(q)
   }
+
+  def getDailyTravels(): Future[Seq[(LocalDate, Option[Int])]] = {
+    val q =travelsTable
+      .groupBy(_.date)
+      .map { case (date, group) =>
+        (date, group.map(_.kilometers).sum)
+      }
+      .sortBy(_._1)
+      .result
+
+    db.run(q)
+  }
 }

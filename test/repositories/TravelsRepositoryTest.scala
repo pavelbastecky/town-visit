@@ -25,6 +25,7 @@ class TravelsRepositoryTest
 
       val repo = app.injector.instanceOf[TravelsRepository]
 
+      await(repo.truncate())
       await(repo.insert(Travel(0, now, city, traveled, None)))
 
       val r = await(repo.findById(1))

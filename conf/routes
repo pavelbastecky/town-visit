@@ -2,3 +2,6 @@ GET             /api/version                                            controll
 
 GET             /api/traveled/distance                                  controllers.TraveledDistanceController.getTraveledDistance(from: String, to: String)
 GET             /api/traveled/duration                                  controllers.TraveledDistanceController.getTraveledDuration(from: String, to: String)
+
+GET             /api/traveled/chart/daily                               controllers.TravelChartController.getDailyChart()
+GET             /api/traveled/chart/weekly                              controllers.TravelChartController.getWeeklyChart()
