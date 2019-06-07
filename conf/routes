@@ -1,1 +1,4 @@
 GET             /api/version                                            controllers.IndexController.getVersion()
+
+GET             /api/traveled/distance                                  controllers.TraveledDistanceController.getTraveledDistance(from: String, to: String)
+GET             /api/traveled/duration                                  controllers.TraveledDistanceController.getTraveledDuration(from: String, to: String)

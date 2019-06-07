@@ -25,7 +25,7 @@ object DistanceCalculator {
     * @param to   Name of the city where is traveled to
     * @return     Calculated distance or None if no path exists.
     */
-  def  findMinKilometers(seq: Seq[Travel], from: String, to: String): Option[Long] =
+  def findMinKilometers(seq: Seq[Travel], from: String, to: String): Option[Long] =
     findMinDistance(seq, from, to)(_.traveledTotal)
 
   /**

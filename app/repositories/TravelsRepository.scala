@@ -45,4 +45,25 @@ class TravelsRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
 
     db.run(q)
   }
+
+  def insertAll(travels: Seq[Travel]) = {
+    val q = travelsTable ++= travels
+
+    db.run(q)
+  }
+
+  def truncate() = {
+    val q = sql"""TRUNCATE TABLE "public"."travels" RESTART IDENTITY""".asUpdate
+
+    db.run(q)
+  }
+
+  def getTravelsSorted(from: String, to: String): Future[Seq[Travel]] = {
+    val q = travelsTable
+      .filter(t => t.city.toLowerCase === from || t.city.toLowerCase === to)
+      .sortBy(t => (t.date, t.id))
+      .result
+
+    db.run(q)
+  }
 }

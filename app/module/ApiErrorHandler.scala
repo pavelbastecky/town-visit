@@ -1,5 +1,6 @@
 package module
 
+import exceptions.ApiException
 import javax.inject.{Inject, Provider}
 import models.ErrorResponse
 import play.api.{Configuration, Environment, OptionalSourceMapper, UsefulException}
@@ -47,6 +48,19 @@ class ApiErrorHandler @Inject()(env: Environment,
           throw new IllegalArgumentException(msg)
       }
       result
+    }
+  }
+
+  /**
+    * Handles custom api exceptions and transforms them to error responses
+    */
+  override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
+    exception match {
+      case e: ApiException =>
+        Future.successful(Results.Status(e.status)(Json.toJson(ErrorResponse(e))))
+
+      case e: Throwable =>
+        super.onServerError(request, e)
     }
   }
 
