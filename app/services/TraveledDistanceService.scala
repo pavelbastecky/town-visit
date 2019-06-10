@@ -27,11 +27,14 @@ class TraveledDistanceService @Inject() (travelsRepository: TravelsRepository)
   }
 
   def findMinDuration(from: String, to: String): Future[DurationResponse] = {
-    logger.info(s"Finding min duration between $from and $to")
+    def sanitize(str: String) = str.trim.toLowerCase()
+    val fromSanitized = sanitize(from)
+    val toSanitized = sanitize(to)
 
-    getTravelsSorted(from, to, s"Error finding min duration between $from and $to")
+    logger.info(s"Finding min duration between $fromSanitized and $toSanitized")
+    getTravelsSorted(from, to, s"Error finding min duration between $fromSanitized and $toSanitized")
       .map { travels =>
-        val duration = DistanceCalculator.findMinDuration(travels, from, to)
+        val duration = DistanceCalculator.findMinDuration(travels, fromSanitized, toSanitized)
         DurationResponse(duration.isDefined, duration)
       }
   }
@@ -41,19 +44,14 @@ class TraveledDistanceService @Inject() (travelsRepository: TravelsRepository)
     * crashed SQL request.
     */
   private def getTravelsSorted(from: String, to: String, errorMsg: => String): Future[Seq[Travel]] = {
-    def sanitize(str: String) = str.trim.toLowerCase()
-
-    val fromSanitized = sanitize(from)
-    val toSanitized = sanitize(to)
-
-    if (fromSanitized.nonEmpty && toSanitized.nonEmpty) {
-      travelsRepository.getTravelsSorted(fromSanitized, toSanitized).recoverWith {
+    if (from.nonEmpty && to.nonEmpty) {
+      travelsRepository.getTravelsSorted(from, to).recoverWith {
         case e: Throwable =>
           logger.error(s"$errorMsg: Error querying the database: ${e.getMessage}", e)
           Future.failed(SqlException(e))
       }
     } else {
-      Future.failed(InvalidFromToException(fromSanitized, toSanitized))
+      Future.failed(InvalidFromToException(from, to))
     }
   }
 }

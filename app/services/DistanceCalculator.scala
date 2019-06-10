@@ -72,14 +72,14 @@ object DistanceCalculator {
     val distance = seq.foldLeft(Distance()) { (d, travel) =>
       // If we are in destination city then try to get new minimum
       val newMinimum =
-        if (travel.city == to) calculateMin(d.source, getValue(travel), d.minimum)
+        if (travel.city.toLowerCase() == to) calculateMin(d.source, getValue(travel), d.minimum)
         else None
 
       // If we are in source city then update source value
       // This needs to be after previous block so it will work even for case that from is the same as to. Otherwise we
       // would change source value too early and we would compared travel to itself.
       val newSource =
-        if (travel.city == from) getValue(travel)
+        if (travel.city.toLowerCase() == from) getValue(travel)
         else None
 
       // Get accumulator value and ensure that we have new or old values
