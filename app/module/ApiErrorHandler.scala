@@ -69,6 +69,8 @@ class ApiErrorHandler @Inject()(env: Environment,
     */
   override protected def onDevServerError(request: RequestHeader,
                                           exception: UsefulException): Future[Result] = {
+    logger.error(s"Uncaught exception: ${exception.getMessage}", exception)
+
     Future.successful (
       InternalServerError(Json.toJson(ErrorResponse(exception)))
     )
@@ -79,6 +81,8 @@ class ApiErrorHandler @Inject()(env: Environment,
     */
   override protected def onProdServerError(request: RequestHeader,
                                            exception: UsefulException): Future[Result] = {
+    logger.error(s"Uncaught exception: ${exception.getMessage}", exception)
+
     Future.successful(InternalServerError)
   }
 

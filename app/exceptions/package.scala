@@ -34,4 +34,13 @@ package object exceptions {
     "Both FROM and TO parameters must be non empty",
     payload = Some(Json.obj("from" -> from, "to" -> to))
   )
+
+  /**
+    * General exception for importing.
+    */
+  case class ImportErrorException(error: Throwable) extends ApiException(
+    "Failed to import data to database",
+    status = Status.INTERNAL_SERVER_ERROR,
+    cause = Some(error)
+  )
 }

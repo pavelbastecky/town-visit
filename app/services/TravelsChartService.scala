@@ -15,8 +15,8 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Service for producing aggregated traveled distance in time periods.
   */
-class TravelsChartService@Inject() (travelsRepository: TravelsRepository)
-                                   (implicit executionContext: ExecutionContext)
+class TravelsChartService @Inject() (travelsRepository: TravelsRepository)
+                                    (implicit executionContext: ExecutionContext)
   extends Logger
 {
   private val weekFields = WeekFields.of(Locale.getDefault())

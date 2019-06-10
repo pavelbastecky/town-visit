@@ -58,6 +58,10 @@ class TravelsRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
     db.run(q)
   }
 
+  def count(): Future[Int]= {
+    db.run(travelsTable.length.result)
+  }
+
   def getTravelsSorted(from: String, to: String): Future[Seq[Travel]] = {
     val q = travelsTable
       .filter(t => t.city.toLowerCase === from || t.city.toLowerCase === to)
@@ -75,6 +79,36 @@ class TravelsRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(imp
       }
       .sortBy(_._1)
       .result
+
+    db.run(q)
+  }
+
+  def getMinTraveled(beforeDate: LocalDate): Future[Long] = {
+    val q =
+      sql"""
+           select t."traveled_total" from "public"."travels" as t
+           where t."date" < $beforeDate and t."traveled_total" is not null
+           order by t."date" desc, t."id" desc
+           limit 1
+      """.as[Long]
+
+    db.run(q.headOption.map(_.getOrElse(0)))
+  }
+
+  def updateTraveledTotal(dateStart: LocalDate, minTraveled: Long) = {
+    val q =
+      sql"""
+           update "public"."travels" as t
+           set traveled_total = $minTraveled + tot.total
+           from (
+             select
+               id,
+               sum(kilometers) over (order by "date", "id" rows between unbounded preceding and current row) as total
+             from travels
+             where "date" >= $dateStart
+           ) as tot
+           where tot.id = t.id and t."date" >= $dateStart
+        """.asUpdate
 
     db.run(q)
   }

@@ -5,3 +5,5 @@ GET             /api/traveled/duration                                  controll
 
 GET             /api/traveled/chart/daily                               controllers.TravelChartController.getDailyChart()
 GET             /api/traveled/chart/weekly                              controllers.TravelChartController.getWeeklyChart()
+
+POST            /api/traveled/import                                    controllers.TravelsFileImportController.importTravels()

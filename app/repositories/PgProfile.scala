@@ -14,6 +14,7 @@ trait PgProfile extends ExPostgresProfile
   ///
   override val api = new API with ArrayImplicits
     with DateTimeImplicits
+    with Date2DateTimePlainImplicits
     with NetImplicits
     with LTreeImplicits
     with RangeImplicits

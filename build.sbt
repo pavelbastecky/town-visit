@@ -15,6 +15,8 @@ libraryDependencies += "org.flywaydb" %% "flyway-play" % "5.3.2"
 libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.1"
 libraryDependencies += "com.github.tminglei" %% "slick-pg" % "0.17.3"
 
+libraryDependencies += "com.opencsv" % "opencsv" % "4.6"
+
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test
 libraryDependencies += "io.gatling.highcharts" % "gatling-charts-highcharts" % "3.1.2" % Test
 libraryDependencies += "io.gatling" % "gatling-test-framework" % "3.1.2" % Test
