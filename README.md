@@ -249,6 +249,8 @@ curl "http://localhost:9000/api/traveled/chart/weekly"
 
 ## Testing
 
+### Unit tests
+
 Application unit tests can be run using SBT:
 
 ```
@@ -256,6 +258,78 @@ sbt test
 ```
 
 Tests are using in memory H2 database to test DB queries.
+
+### Performance tests
+
+Performance tests are done using gatling. there is prepared simulation included in the 
+project. It runs 10K users over 100s. Each user performs total 6 different requests for 
+durations, distances and charts endpoints.
+
+1) Start Play in production mode, by [staging the application](https://www.playframework.com/documentation/2.5.x/Deploying) and running the play script:
+```
+sbt stage
+target/universal/stage/bin/town-visit -Dplay.http.secret.key=some-long-key-that-will-be-used-by-your-application
+```
+
+2) Import test travel to fresh database (only once). There is generated 10K 
+sample for performance testing. If using custom file then you will need to change 
+routes in gatlig spec.
+```
+curl -X POST  --data-binary "@examples/generated-travels-gatling-10K.tsv" http://localhost:9000/api/traveled/import
+```
+
+3) Run gatling using SBT 
+```
+sbt gatling:test
+```
+
+For best results, start the gatling load test up on another machine so you do not 
+have contending resources.  
+
+You can edit the [Gatling simulation](http://gatling.io/docs/2.2.2/general/simulation_structure.html#simulation-structure), 
+and change the numbers as appropriate.
+
+Once the test completes, you'll see an path to file with result charts.
+
+#### Performance results
+
+Following shows results for server and gatling running on single development laptop:
+
+* Processor: i7-8550U
+* Memory: 16 GB
+
+System handled over 59K of total 60K requests in 100s for a database with 10K travel entries.
+
+```
+---- Requests ------------------------------------------------------------------
+> Global                                                   (OK=59430  KO=570   )
+> Distance-uv-zz                                           (OK=9470   KO=530   )
+> Duration-aa-bb                                           (OK=9962   KO=38    )
+> Daily-Chart                                              (OK=9998   KO=2     )
+> Distance-d4-kb                                           (OK=10000  KO=0     )
+> Distance-mb-kn                                           (OK=10000  KO=0     )
+> Weekly-Chart                                             (OK=10000  KO=0     )
+---- Errors --------------------------------------------------------------------
+> i.n.c.ConnectTimeoutException: connection timed out: localhost    570 (100.0%)
+/127.0.0.1:9000
+
+---- Global Information --------------------------------------------------------
+> request count                                      60000 (OK=59430  KO=570   )
+> min response time                                      4 (OK=4      KO=10000 )
+> max response time                                  36362 (OK=36362  KO=10289 )
+> mean response time                                   511 (OK=420    KO=10014 )
+> std deviation                                       1482 (OK=1159   KO=32    )
+> response time 50th percentile                        102 (OK=101    KO=10004 )
+> response time 75th percentile                        205 (OK=200    KO=10011 )
+> response time 95th percentile                       2246 (OK=2092   KO=10060 )
+> response time 99th percentile                       9949 (OK=4955   KO=10192 )
+> mean requests/sec                                512.821 (OK=507.949 KO=4.872 )
+---- Response Time Distribution ------------------------------------------------
+> t < 800 ms                                         51432 ( 86%)
+> 800 ms < t < 1200 ms                                2835 (  5%)
+> t > 1200 ms                                         5163 (  9%)
+> failed                                               570 (  1%)
+```
 
 ## Known problems
 

@@ -18,7 +18,7 @@ import scala.util.{Failure, Random, Success, Try}
   * Example:
   *   Following command will create new files in repository root containing 1000 travels, each city name will
   *   have 2 characters.
-  *   sbt "runMain utils.TravelsGenerator generated-travels.tsv 1000 2"
+  *   sbt "runMain utils.TravelsGenerator generated-travels-gatling-10K.tsv 1000 2"
   *
   */
 object TravelsGenerator {
@@ -46,7 +46,7 @@ object TravelsGenerator {
   }
 
   def nextAlphaNum: Char = {
-    val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     chars charAt (rnd nextInt chars.length)
   }
 

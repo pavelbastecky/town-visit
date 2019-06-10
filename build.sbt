@@ -43,5 +43,5 @@ lazy val root = (project in file("."))
     buildInfoPackage := "info",
     buildInfoOptions += BuildInfoOption.BuildTime,
 
-    javaOptions in Test += "-Dconfig.file=test/application.conf"
+    javaOptions in Test += "-Dconfig.file=test/application.conf",
   )
