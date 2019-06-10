@@ -17,22 +17,23 @@ class TraveledDistanceService @Inject() (travelsRepository: TravelsRepository)
   extends Logger
 {
   def findMinKilometers(from: String, to: String): Future[DistanceResponse] = {
-    logger.info(s"Finding min distance from $from to $to")
+    val fromSanitized = sanitize(from)
+    val toSanitized = sanitize(to)
+    logger.info(s"Finding min distance from $fromSanitized to $toSanitized")
 
-    getTravelsSorted(from, to, s"Error finding min distance from $from to $to")
+    getTravelsSorted(fromSanitized, toSanitized, s"Error finding min distance from $fromSanitized to $toSanitized")
       .map { travels =>
-        val distance = DistanceCalculator.findMinKilometers(travels, from, to)
+        val distance = DistanceCalculator.findMinKilometers(travels, fromSanitized, toSanitized)
         DistanceResponse(distance.isDefined, distance)
       }
   }
 
   def findMinDuration(from: String, to: String): Future[DurationResponse] = {
-    def sanitize(str: String) = str.trim.toLowerCase()
     val fromSanitized = sanitize(from)
     val toSanitized = sanitize(to)
-
     logger.info(s"Finding min duration between $fromSanitized and $toSanitized")
-    getTravelsSorted(from, to, s"Error finding min duration between $fromSanitized and $toSanitized")
+
+    getTravelsSorted(fromSanitized, toSanitized, s"Error finding min duration between $fromSanitized and $toSanitized")
       .map { travels =>
         val duration = DistanceCalculator.findMinDuration(travels, fromSanitized, toSanitized)
         DurationResponse(duration.isDefined, duration)
@@ -54,4 +55,6 @@ class TraveledDistanceService @Inject() (travelsRepository: TravelsRepository)
       Future.failed(InvalidFromToException(from, to))
     }
   }
+
+  private def sanitize(str: String) = str.trim.toLowerCase()
 }

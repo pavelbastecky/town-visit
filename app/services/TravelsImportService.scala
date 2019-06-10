@@ -28,7 +28,7 @@ object TravelsImportService {
   *
   * Core of the service is AKKA stream:
   *   1) Reads request body one by one
-  *   2) Parses line using TSV parser to [[Travel]] objects
+  *   2) Parses line using TSV parser to Travel objects
   *   3) Inserts batches of travels to database
   *   4) Rebuilds column with cumulative travels
   *   5) Returns number of processed items

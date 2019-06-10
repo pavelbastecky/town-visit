@@ -11,12 +11,12 @@ import models.Travel
 object DistanceCalculator {
 
   /**
-    * Method to calculate minimal distance between cities with given names. Uses [[Travel.traveledTotal]] value as
+    * Method to calculate minimal distance between cities with given names. Uses Travel.traveledTotal value as
     * optimization so it doesn't need to sum kilometers in for cities on path.
     *
     * IMPORTANT:
     * * Given set needs to contain list of visited town in order of visit. Each visit needs to have calculated
-    *   [[Travel.traveledTotal]] value. If value is not defined then such row is ignored.
+    *   Travel.traveledTotal value. If value is not defined then such row is ignored.
     *
     * * Traveled total values also needs to be in ascending order. If they are descending then result will be incorrect.
     *
@@ -33,7 +33,7 @@ object DistanceCalculator {
     *
     * IMPORTANT:
     * * Given set needs to contain list of visited town in order of visit.     *
-    * * [[Travel.date]] values needs to be in ascending order. If they are descending then result will be incorrect.
+    * * Travel.date values needs to be in ascending order. If they are descending then result will be incorrect.
     *
     * @param seq  Ordered sequence of city travels
     * @param from Name of the city from which is traveled
